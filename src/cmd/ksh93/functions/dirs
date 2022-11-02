@@ -1,0 +1,20 @@
+# Display directory stack -- $HOME displayed as ~.
+function dirs {
+    typeset dir="${PWD#$HOME/}"
+    case $dir in
+    $HOME)
+        dir=\~
+        ;;
+    /*)
+        ;;
+    *)
+        dir=\~/$dir
+        ;;
+    esac
+
+    # shellcheck disable=SC2154
+    select _ in "$dir" "${_push_stack[@]}"
+    do
+        :
+    done < /dev/null
+}

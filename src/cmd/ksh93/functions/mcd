@@ -1,0 +1,18 @@
+# Menu driven change directory command.
+function mcd {
+    typeset dir="${PWD#$HOME/}"
+    case $dir in
+    $HOME) dir=\~
+        ;;
+    /*) ;;
+    *)  dir=\~/$dir
+        ;;
+    esac
+
+    PS3='Select by number or enter a name: '
+    # shellcheck disable=SC2154
+    select dir in "$dir" "${_push_stack[@]}"
+    do
+        _cd "$REPLY" && return
+    done
+}
